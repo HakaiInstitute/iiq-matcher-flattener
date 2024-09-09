@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "iiq-matcher-flattener",
+    "productName": "IIQ-MATCHER-FLATTENER",
     "version": "0.1.0"
   },
   "tauri": {
