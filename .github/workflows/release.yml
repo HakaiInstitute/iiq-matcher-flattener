@@ -33,13 +33,6 @@ jobs:
           profile: minimal
           override: true
 
-      # Ensure Rust cache directories exist
-      - name: Create Rust cache directories
-        run: |
-          mkdir -p ~/.cargo/registry
-          mkdir -p ~/.cargo/git
-          mkdir -p ${{ github.workspace }}/src-tauri/target
-
       - name: Cache Rust dependencies
         uses: actions/cache@v3
         with:
