@@ -41,7 +41,7 @@ installer will install the app and create a desktop shortcut.
 
 This app uses [Tauri](https://tauri.app/) to create a cross-platform desktop app. It is written in Rust and uses the
 Tauri framework to create the GUI. The frontend uses React with TailwindCSS for styling. The backend is a very simple
-Rust function that calls the [`ix-match`](https://github.com/tayden/ix-match) library to match the images.
+Rust function that calls the [`ix-match`](https://github.com/HakaiInstitute/ix-match) library to match the images.
 
 To run the dev server, install Tauri and run `npm run tauri dev` in the root directory. You can build the app with
 `npm run tauri build`.
