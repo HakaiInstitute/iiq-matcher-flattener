@@ -13,9 +13,22 @@ simultaneously. Unmatched imagery will be moved to a "unmatched" subdirectory in
 `CAMERA_NIR` source directories.
 
 [//]: # (Image)
-<p align="center">
-  <img src="img.png" alt="App Screenshot" height="400px">
+<p style="display: flex; justify-content: center; align-items: center">
+  <img src="img.png" alt="App Screenshot" height=400>
 </p>
+
+### Assumptions
+
+This app has been designed to work with the following assumptions:
+
+1. The raw images are stored in two directories: one for RGB images and one for NIR images.
+2. The images are named in the format `yymmdd_HHMMSSddd.iiq`. They may or may not be located in a number of
+   subdirectories of the form `yymmdd_HHMM`.
+
+## Installation
+
+Download the installer from the [releases page](https://github.com/HakaiInstitute/iiq-matcher-flattener/releases). The
+installer will install the app and create a desktop shortcut.
 
 ## Usage
 
