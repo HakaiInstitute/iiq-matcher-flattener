@@ -7,6 +7,8 @@ on:
 
 jobs:
   release:
+    permissions:
+      contents: write
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
@@ -74,42 +76,30 @@ jobs:
           $LATEST_JSON | ConvertTo-Json -Depth 5 | Out-File -FilePath latest.json
 
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: true
-          prerelease: false
+        run: |
+          $VERSION = $env:GITHUB_REF -replace 'refs/tags/', ''
+          gh release create $VERSION --draft --title "Release $VERSION" --generate-notes
 
       - name: Upload Windows NSIS Installer
-        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./src-tauri/target/release/bundle/nsis/*.exe
-          asset_name: app-setup.exe
-          asset_content_type: application/vnd.microsoft.portable-executable
+        run: |
+          $VERSION = $env:GITHUB_REF -replace 'refs/tags/', ''
+          $NSIS_INSTALLER = Get-ChildItem src-tauri\target\release\bundle\nsis\*.exe | Select-Object -First 1
+          gh release upload $VERSION $NSIS_INSTALLER.FullName
 
       - name: Upload Checksum
-        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./checksum.txt
-          asset_name: checksum.txt
-          asset_content_type: text/plain
+        run: |
+          $VERSION = $env:GITHUB_REF -replace 'refs/tags/', ''
+          gh release upload $VERSION checksum.txt
 
       - name: Upload latest.json
-        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./latest.json
-          asset_name: latest.json
-          asset_content_type: application/json
+        run: |
+          $VERSION = $env:GITHUB_REF -replace 'refs/tags/', ''
+          gh release upload $VERSION latest.json
