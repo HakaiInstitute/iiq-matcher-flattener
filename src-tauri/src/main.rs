@@ -13,10 +13,13 @@ async fn run(rgb_dir: &str, nir_dir: &str, thresh: u64) -> Result<String, String
     let rgb_dir = std::path::Path::new(rgb_dir);
     let nir_dir = std::path::Path::new(nir_dir);
 
-    match process_images(rgb_dir, nir_dir, thresh, false, true) {
-        Ok((rgb_count, nir_count, matched_count)) => {
-            Ok(format!("RGB: {}, NIR: {} ({} match)", rgb_count, nir_count, matched_count))
-        },
+    match process_images(rgb_dir, nir_dir, thresh, false, false, true) {
+        Ok((rgb_count, nir_count, matched_count, empty_rgb_count, empty_nir_count)) => {
+            Ok(format!("RGB: {rgb}, NIR: {nir} ({match} match)\nEmpty RGB: {rgb_e}, Empty NIR: {nir_e}",
+                       rgb = rgb_count, nir = nir_count,
+                       match = matched_count,
+                       rgb_e = empty_rgb_count, nir_e = empty_nir_count))
+        }
         Err(e) => Err(e.to_string())
     }
 }

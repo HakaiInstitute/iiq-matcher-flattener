@@ -26,7 +26,9 @@ export default function Notification({ title, message, isSuccess, onDismiss }: N
                     DISMISS
                 </button>
             </div>
-            <p className="text-lg">{message}</p>
+            {message.split("\n").map((line, i) => (
+                <p key={i} className="text-lg">{line}</p>
+            ))}
         </div>
     )
 }
