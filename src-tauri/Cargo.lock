@@ -1077,6 +1077,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "globwalker"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b8898f8c437d25f5c413f1d08ac4dda7973253df8dfd80e23403a7883d6796ba"
+dependencies = [
+ "bitflags 2.6.0",
+ "ignore",
+ "walkdir",
+]
+
+[[package]]
 name = "gobject-sys"
 version = "0.15.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1445,13 +1456,13 @@ checksum = "49f1f14873335454500d59611f1cf4a4b0f786f9ac11f4312a78e4cf2566695b"
 
 [[package]]
 name = "ix-match"
-version = "0.2.8"
+version = "0.2.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f57d103b0309b60e18013cb70bc2699da887bb7719a53b006ba5b7d9239ddef0"
+checksum = "617786e8f1f793874b28550e340fff450c73ef815f158e30b18d1bdb12bf0c13"
 dependencies = [
  "anyhow",
  "chrono",
- "glob",
+ "globwalker",
 ]
 
 [[package]]
