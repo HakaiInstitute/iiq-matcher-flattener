@@ -2,24 +2,36 @@
   "build": {
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build",
-    "devPath": "http://localhost:1420",
-    "distDir": "../dist"
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420"
   },
-  "package": {
-    "productName": "IIQ-MATCHER-FLATTENER",
-    "version": "0.1.3"
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "createUpdaterArtifacts": "v1Compatible"
   },
-  "tauri": {
-    "allowlist": {
-      "all": false,
-      "shell": {
-        "all": false,
-        "open": true
-      },
-      "dialog": {
-        "all": false,
-        "open": true
-      }
+  "productName": "IIQ-MATCHER-FLATTENER",
+  "mainBinaryName": "IIQ-MATCHER-FLATTENER",
+  "version": "0.1.3",
+  "identifier": "com.iiq-matcher-flattener.app",
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQ4OTEzQUUxNUQzRjYwRUYKUldUdllEOWQ0VHFSMkNHR1Q2Z1RFdUwzMVhMZU00RDZJeWp3UEdNUjU4bEF1ZUNvOUovQ1FQcDUK",
+      "endpoints": [
+        "https://github.com/HakaiInstitute/iiq-matcher-flattener/releases/latest/download/latest.json"
+      ]
+    }
+  },
+  "app": {
+    "security": {
+      "csp": null
     },
     "windows": [
       {
@@ -27,29 +39,6 @@
         "width": 800,
         "height": 550
       }
-    ],
-    "security": {
-      "csp": null
-    },
-    "bundle": {
-      "active": true,
-      "targets": "all",
-      "identifier": "com.iiq-matcher-flattener.app",
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ]
-    },
-    "updater": {
-      "active": true,
-      "endpoints": [
-        "https://github.com/HakaiInstitute/iiq-matcher-flattener/releases/latest/download/latest.json"
-      ],
-      "dialog": true,
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQ4OTEzQUUxNUQzRjYwRUYKUldUdllEOWQ0VHFSMkNHR1Q2Z1RFdUwzMVhMZU00RDZJeWp3UEdNUjU4bEF1ZUNvOUovQ1FQcDUK"
-    }
+    ]
   }
 }
