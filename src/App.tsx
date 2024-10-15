@@ -11,6 +11,7 @@ export default function Component() {
   const [nirDirectory, setNirDirectory] = useState("");
   const [timeThreshold, setTimeThreshold] = useState(500);
   const [isRunning, setIsRunning] = useState(false);
+  const [revertChecked, setRevertChecked] = useState(false);
   const [notification, setNotification] = useState<{
     title: string;
     message: string;
@@ -38,11 +39,13 @@ export default function Component() {
   const handleRun = async () => {
     setIsRunning(true);
     try {
-      const response: string = await invoke("process", {
+      const action = revertChecked ? "revert_process" : "process";
+      const params = {
         rgbDir: rgbDirectory,
         nirDir: nirDirectory,
-        thresh: timeThreshold,
-      });
+        ...(action === "process" && { thresh: timeThreshold }),
+      };
+      const response: string = await invoke(action, params);
       console.log(response);
       setNotification({
         title: "Great success!",
@@ -121,19 +124,48 @@ export default function Component() {
             </div>
           </div>
 
-          <div>
-            <label htmlFor="time-threshold" className="block text-lg mb-2">
-              IMAGE MATCH THRESHOLD (MILLISECONDS):
-            </label>
-            <input
-              id="time-threshold"
-              type="number"
-              value={timeThreshold}
-              onChange={(e) => setTimeThreshold(Number(e.target.value))}
-              min={0}
-              step={100}
-              className="w-full border-2 border-black p-2"
-            />
+          <div className="flex items-end space-x-4 justify-between">
+            <div className="flex-grow">
+              <label
+                htmlFor="time-threshold"
+                className={`block text-lg mb-2 ${revertChecked && "line-through"}`}
+              >
+                IMAGE MATCH THRESHOLD (MILLISECONDS):
+              </label>
+              <input
+                id="time-threshold"
+                type="number"
+                value={timeThreshold}
+                onChange={(e) => setTimeThreshold(Number(e.target.value))}
+                min={0}
+                step={100}
+                className="w-full border-2 border-black p-2 disabled:line-through disabled:text-white disabled:bg-white"
+                disabled={revertChecked}
+              />
+            </div>
+
+            <div className="flex items-center space-x-4">
+              <div className="relative w-[22.7px] h-[38.7px] py-2">
+                <input
+                  type="checkbox"
+                  id="revert-checkbox"
+                  className="w-full h-full border-2 border-black appearance-none focus:outline-none cursor-pointer"
+                  checked={revertChecked}
+                  onChange={() => setRevertChecked(!revertChecked)}
+                />
+                {revertChecked && (
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <span className="text-3xl font-bold">X</span>
+                  </div>
+                )}
+              </div>
+              <label
+                htmlFor="revert-checkbox"
+                className="text-xl cursor-pointer"
+              >
+                REVERT
+              </label>
+            </div>
           </div>
 
           {isRunning ? (

@@ -1,7 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use ix_match::process_images;
+use ix_match::{process_images, revert_changes};
 use std::time::Duration;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
@@ -24,13 +24,30 @@ async fn process(rgb_dir: &str, nir_dir: &str, thresh: u64) -> Result<String, St
     }
 }
 
+#[tauri::command]
+async fn revert_process(rgb_dir: &str, nir_dir: &str) -> Result<String, String> {
+    println!("Running with {} {}", rgb_dir, nir_dir);
+
+    let rgb_dir = std::path::Path::new(rgb_dir);
+    let nir_dir = std::path::Path::new(nir_dir);
+
+    match revert_changes(rgb_dir, nir_dir, false, true) {
+        Ok((rgb_count, nir_count)) => Ok(format!(
+            "RGB: {rgb}, NIR: {nir} reverted to original locations",
+            rgb = rgb_count,
+            nir = nir_count
+        )),
+        Err(e) => Err(e.to_string()),
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
-        .invoke_handler(tauri::generate_handler![process])
+        .invoke_handler(tauri::generate_handler![process, revert_process])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

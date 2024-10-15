@@ -19,7 +19,7 @@
   },
   "productName": "IIQ-MATCHER-FLATTENER",
   "mainBinaryName": "IIQ-MATCHER-FLATTENER",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "identifier": "com.iiq-matcher-flattener.app",
   "plugins": {
     "updater": {
