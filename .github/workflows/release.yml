@@ -45,47 +45,15 @@ jobs:
         run: npm ci
 
       - name: Build Tauri app
+        uses: tauri-apps/tauri-action@v0
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_KEY_PASSWORD: ""
-        run: npm run tauri build
-
-      - name: Generate latest.json
-        run: |
-          $VERSION = $env:GITHUB_REF -replace 'refs/tags/v', ''
-          $NSIS_INSTALLER = Get-ChildItem src-tauri\target\release\bundle\nsis\*.zip | Select-Object -First 1
-          $SIGNATURE = Get-Content src-tauri\target\release\bundle\nsis\*.sig -Raw
-          $LATEST_JSON = @{
-            version = $VERSION
-            notes = "See the assets to download this version and install."
-            pub_date = (Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ")
-            platforms = @{
-              "windows-x86_64" = @{
-                signature = $SIGNATURE
-                url = "https://github.com/${{ github.repository }}/releases/download/v${VERSION}/$($NSIS_INSTALLER.Name)"
-              }
-            }
-          }
-          $LATEST_JSON | ConvertTo-Json -Depth 5 | Out-File -FilePath latest.json
-
-      - name: Create Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          $VERSION = $env:GITHUB_REF -replace 'refs/tags/', ''
-          gh release create $VERSION --draft --title "Release $VERSION" --generate-notes
-
-      - name: Upload Windows NSIS Installer
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          $VERSION = $env:GITHUB_REF -replace 'refs/tags/', ''
-          $NSIS_INSTALLER = Get-ChildItem src-tauri\target\release\bundle\nsis\*.zip | Select-Object -First 1
-          gh release upload $VERSION $NSIS_INSTALLER.FullName
-
-      - name: Upload latest.json
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          $VERSION = $env:GITHUB_REF -replace 'refs/tags/', ''
-          gh release upload $VERSION latest.json
+        with:
+          tagName: v__VERSION__
+          releaseName: Release v__VERSION__
+          releaseBody: 'See the assets to download this version and install.'
+          releaseDraft: true
+          prerelease: false
+          updaterJsonPreferNsis: true
